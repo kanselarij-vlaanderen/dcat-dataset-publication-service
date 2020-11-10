@@ -6,7 +6,7 @@ const DATASET_ATTACHMENT_TYPE = 'http://themis.vlaanderen.be/id/concept/distribu
 const MU_APPLICATION_GRAPH = 'http://mu.semte.ch/graphs/publication-tasks';
 const PUBLIC_GRAPH = 'http://mu.semte.ch/graphs/public';
 const APPLICATION_DOMAIN = process.env.APPLICATION_DOMAIN || 'https://themis.vlaanderen.be';
-const UPDATE_BATCH_SIZE = parseInt(process.env.UPDATE_BATCH_SIZE) || 100;
+const UPDATE_BATCH_SIZE = parseInt(process.env.UPDATE_BATCH_SIZE) || 10;
 const SELECT_BATCH_SIZE = parseInt(process.env.SELECT_BATCH_SIZE) || 1000;
 
 export {
