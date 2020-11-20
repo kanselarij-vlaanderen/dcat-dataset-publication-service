@@ -9,7 +9,6 @@ app.use(bodyParser.json());
 app.post('/delta', async function (req, res, next) {
   const isRunning = await getRunningReleaseTask();
 
-
   if (!isRunning) {
     const delta = req.body;
     const inserts = flatten(delta.map(changeSet => changeSet.inserts));
@@ -31,14 +30,12 @@ app.post('/delta', async function (req, res, next) {
       }
     } else {
       console.log(`No triples found in the delta message.`);
-      res.status(200).end();
+      return res.status(200).end();
     }
   } else {
     console.log('No release task found in delta message.');
-    res.end('No release task found in delta message.');
+    return res.end('No release task found in delta message.');
   }
 });
-
-
 
 app.use(errorHandler);
