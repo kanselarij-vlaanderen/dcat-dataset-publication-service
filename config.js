@@ -5,7 +5,7 @@ const DATASET_NEWSITEM_TYPE = 'http://themis.vlaanderen.be/id/concept/distributi
 const DATASET_ATTACHMENT_TYPE = 'http://themis.vlaanderen.be/id/concept/distribution-type/c4d99dde-3df9-4da1-8136-9a3b2de82de4';
 const MU_APPLICATION_GRAPH = 'http://mu.semte.ch/graphs/publication-tasks';
 const PUBLIC_GRAPH = 'http://mu.semte.ch/graphs/public';
-const APPLICATION_DOMAIN = process.env.APPLICATION_DOMAIN || 'https://themis.vlaanderen.be';
+const HOST_DOMAIN = process.env.HOST_DOMAIN || 'https://themis.vlaanderen.be';
 const UPDATE_BATCH_SIZE = parseInt(process.env.UPDATE_BATCH_SIZE) || 10;
 const SELECT_BATCH_SIZE = parseInt(process.env.SELECT_BATCH_SIZE) || 1000;
 
@@ -17,7 +17,7 @@ export {
   DATASET_ATTACHMENT_TYPE,
   MU_APPLICATION_GRAPH,
   PUBLIC_GRAPH,
-  APPLICATION_DOMAIN,
+  HOST_DOMAIN,
   UPDATE_BATCH_SIZE,
   SELECT_BATCH_SIZE
 };
