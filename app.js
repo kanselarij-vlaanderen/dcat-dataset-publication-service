@@ -6,6 +6,19 @@ import bodyParser from 'body-parser';
 // parse application/json
 app.use(bodyParser.json());
 
+async function init() {
+  // check if any release task is already waiting when starting the service
+  const task = await getNextReleaseTask();
+  if (task) {
+    console.log(`Start releasing new DCAT data on start-up`);
+    task.execute(); // errors are handled inside task.execute()
+  } else {
+    console.log(`No scheduled release task found on start-up. Waiting for new deltas.`);
+  }
+}
+
+init();
+
 app.post('/delta', async function (req, res, next) {
   const isRunning = await getRunningReleaseTask();
 
