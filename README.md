@@ -18,6 +18,33 @@ Add the service to your `docker-compose.yml`:
 
 The mounted volume `./data/files` is the location where the documents will be stored.
 
+Next, make the service listen for new conversion tasks. Assuming a delta-notifier is already available in the stack, add the following rules to the delta-notifier's configuration in `./config/delta/rules`.
+
+```javascript
+export default [
+  {
+    match: {
+      predicate: {
+        type: 'uri',
+        value: 'http://www.w3.org/ns/adms#status'
+      },
+      object: {
+        type: 'uri',
+        value: 'http://kanselarij.vo.data.gift/release-task-statuses/ready-for-release'
+      }
+    },
+    callback: {
+      method: 'POST',
+      url: 'http://dcat-dataset-publication/delta'
+    },
+    options: {
+      resourceFormat: 'v0.0.1',
+      gracePeriod: 1000,
+      ignoreFromSelf: true
+    }
+  }
+];
+```
 
 ## Reference
 ### Configuration
@@ -50,6 +77,7 @@ The following environment variables can be optionally configured:
 #### Release task statuses
 The status of the release task will be updated to reflect the progress of the task. The following statuses are known:
 * http://kanselarij.vo.data.gift/release-task-statuses/not-started
+* http://kanselarij.vo.data.gift/release-task-statuses/preparing-release
 * http://kanselarij.vo.data.gift/release-task-statuses/ready-for-release
 * http://kanselarij.vo.data.gift/release-task-statuses/releasing
 * http://kanselarij.vo.data.gift/release-task-statuses/success
@@ -67,9 +95,7 @@ If an error occurs during the release, subsequent dataset releases are blocked.
 
 On successful release of a dataset, the status of the `ext:ReleaseTask` is updated to `success`.
 
-The service makes 2 core assumptions that must be respected at all times:
-1. At any moment we know that the latest `ext:deltaUntil` timestamp on a task, either in failed/ongoing/success state, reflects the timestamp of the latest delta file that has been completely and successfully consumed
-2. Maximum 1 release task is running at any moment in time
+The service makes a core assumption that must be respected at all times maximum 1 release task is running at any moment in time
 
 ### API
 ```
