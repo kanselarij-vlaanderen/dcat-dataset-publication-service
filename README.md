@@ -10,10 +10,8 @@ Add the service to your `docker-compose.yml`:
 ```
   dcat-dataset-publication:
     image: kanselarij/dcat-dataset-publication-service
-    environment:
-      UPDATE_BATCH_SIZE: 1 # workaround for mu-authorization parsing error
     volumes:
-      - ./data/files:/share 
+      - ./data/files:/share
 ```
 
 The mounted volume `./data/files` is the location where the documents will be stored.
