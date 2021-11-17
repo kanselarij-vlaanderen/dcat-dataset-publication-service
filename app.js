@@ -46,8 +46,8 @@ app.post('/delta', async function (req, res, next) {
       return res.status(200).end();
     }
   } else {
-    console.log('No release task found in delta message.');
-    return res.end('No release task found in delta message.');
+    console.log("Another release task is running. Not attempting to parse delta's for new tasks.");
+    return res.end("Another release task is running. Not attempting to parse delta's for new tasks.");
   }
 });
 
