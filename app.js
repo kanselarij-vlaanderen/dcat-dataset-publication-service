@@ -1,5 +1,5 @@
 import { app, errorHandler } from 'mu';
-import { getRunningReleaseTask, getNextReleaseTask, TASK_READY_STATUS } from './lib/release-task';
+import { getRunningReleaseTask, getNextReleaseTask, getFailedTask, logFailureResolutionManual, TASK_READY_STATUS } from './lib/release-task';
 import flatten from 'lodash.flatten';
 import bodyParser from 'body-parser';
 
@@ -13,7 +13,12 @@ async function init() {
     console.log(`Start releasing new DCAT data on start-up`);
     task.execute(); // errors are handled inside task.execute()
   } else {
-    console.log(`No scheduled release task found on start-up. Waiting for new deltas.`);
+    const failedTask = await getFailedTask();
+    if (failedTask) {
+      logFailureResolutionManual(failedTask.uri);
+    } else {
+      console.log(`No scheduled release task found on start-up. Waiting for new deltas.`);
+    }
   }
 }
 
