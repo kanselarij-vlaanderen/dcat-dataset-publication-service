@@ -1,6 +1,6 @@
 {
   "name": "dcat-dataset-publication-service",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Microservice publishing DCAT datasets and distributions for Themis",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
