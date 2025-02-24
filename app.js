@@ -1,5 +1,6 @@
 import { app, errorHandler } from 'mu';
-import { getRunningReleaseTask, getNextReleaseTask, getFailedTask, logFailureResolutionManual, TASK_READY_STATUS } from './lib/release-task';
+import { getRunningReleaseTask, getNextReleaseTask, getFailedTask, logFailureResolutionManual } from './lib/release-task';
+import { RELEASE_TASK_STATUSES } from './config'
 import flatten from 'lodash.flatten';
 import bodyParser from 'body-parser';
 
@@ -32,7 +33,7 @@ app.post('/delta', async function (req, res, next) {
     const inserts = flatten(delta.map(changeSet => changeSet.inserts));
     const statusTriples = inserts.filter((t) => {
       return t.predicate.value == 'http://www.w3.org/ns/adms#status'
-        && t.object.value == TASK_READY_STATUS;
+        && t.object.value == RELEASE_TASK_STATUSES.READY;
     });
 
     if (statusTriples.length) {
@@ -47,7 +48,7 @@ app.post('/delta', async function (req, res, next) {
         return res.status(200).end();
       }
     } else {
-      console.log(`No insertion of status <${TASK_READY_STATUS}> found in the delta message.`);
+      console.log(`No insertion of status <${RELEASE_TASK_STATUSES.READY}> found in the delta message.`);
       return res.status(200).end();
     }
   } else {
