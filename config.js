@@ -9,6 +9,23 @@ const HOST_DOMAIN = process.env.HOST_DOMAIN || 'https://themis.vlaanderen.be';
 const UPDATE_BATCH_SIZE = parseInt(process.env.UPDATE_BATCH_SIZE) || 10;
 const SELECT_BATCH_SIZE = parseInt(process.env.SELECT_BATCH_SIZE) || 1000;
 
+const EMAIL_FROM_ADDRESS = process.env.EMAIL_FROM_ADDRESS ?? 'noreply@kaleidos.vlaanderen.be';
+const EMAIL_TO_ADDRESS_ON_FAILURE = process.env.EMAIL_TO_ADDRESS_ON_FAILURE ?? '';
+
+// constants
+const RELEASE_TASK_STATUSES = {
+  // NOT_STARTED: 'http://kanselarij.vo.data.gift/release-task-statuses/not-started', // unused in this service
+  // PREPARING_RELEASE: 'http://kanselarij.vo.data.gift/release-task-statuses/preparing-release', // unused in this service
+  READY_FOR_RELEASE: 'http://kanselarij.vo.data.gift/release-task-statuses/ready-for-release',
+  RELEASING: 'http://kanselarij.vo.data.gift/release-task-statuses/releasing',
+  SUCCESS: 'http://kanselarij.vo.data.gift/release-task-statuses/success',
+  FAILED: 'http://kanselarij.vo.data.gift/release-task-statuses/failed'
+}
+
+const RESOURCE_BASE_URI  = 'http://themis.vlaanderen.be';
+const EMAIL_GRAPH_URI = "http://mu.semte.ch/graphs/system/email";
+const EMAIL_OUTBOX_URI = "http://themis.vlaanderen.be/id/mail-folders/d9a415a4-b5e5-41d0-80ee-3f85d69e318c";
+
 export {
   BESLUITVORMING_CATALOG_URI,
   VERGADERACTIVITEIT_TYPE,
@@ -19,5 +36,11 @@ export {
   PUBLIC_GRAPH,
   HOST_DOMAIN,
   UPDATE_BATCH_SIZE,
-  SELECT_BATCH_SIZE
+  SELECT_BATCH_SIZE,
+  EMAIL_FROM_ADDRESS,
+  EMAIL_TO_ADDRESS_ON_FAILURE,
+  RELEASE_TASK_STATUSES,
+  RESOURCE_BASE_URI,
+  EMAIL_GRAPH_URI,
+  EMAIL_OUTBOX_URI
 };
