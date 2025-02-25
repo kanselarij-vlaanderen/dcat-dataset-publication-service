@@ -14,9 +14,10 @@ const EMAIL_TO_ADDRESS_ON_FAILURE = process.env.EMAIL_TO_ADDRESS_ON_FAILURE ?? '
 
 // constants
 const RELEASE_TASK_STATUSES = {
-  STARTED: 'http://kanselarij.vo.data.gift/release-task-statuses/not-started', // unused in this service
-  READY: 'http://kanselarij.vo.data.gift/release-task-statuses/ready-for-release',
-  ONGOING: 'http://kanselarij.vo.data.gift/release-task-statuses/releasing',
+  // NOT_STARTED: 'http://kanselarij.vo.data.gift/release-task-statuses/not-started', // unused in this service
+  // PREPARING_RELEASE: 'http://kanselarij.vo.data.gift/release-task-statuses/preparing-release', // unused in this service
+  READY_FOR_RELEASE: 'http://kanselarij.vo.data.gift/release-task-statuses/ready-for-release',
+  RELEASING: 'http://kanselarij.vo.data.gift/release-task-statuses/releasing',
   SUCCESS: 'http://kanselarij.vo.data.gift/release-task-statuses/success',
   FAILED: 'http://kanselarij.vo.data.gift/release-task-statuses/failed'
 }
