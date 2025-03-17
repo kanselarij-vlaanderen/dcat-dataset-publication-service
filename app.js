@@ -26,34 +26,40 @@ async function init() {
 init();
 
 app.post('/delta', async function (req, res, next) {
-  const isRunning = await getRunningReleaseTask();
-
-  if (!isRunning) {
-    const delta = req.body;
-    const inserts = flatten(delta.map(changeSet => changeSet.inserts));
-    const statusTriples = inserts.filter((t) => {
-      return t.predicate.value == 'http://www.w3.org/ns/adms#status'
-        && t.object.value == RELEASE_TASK_STATUSES.READY_FOR_RELEASE;
-    });
-
-    if (statusTriples.length) {
-      console.log(`Found ${statusTriples.length} release tasks.`);
-      const task = await getNextReleaseTask();
-      if (task) {
-        console.log(`Start releasing new DCAT data`);
-        task.execute(); // errors are handled inside task.execute()
-        return res.status(202).end();
+  try {
+    const isRunning = await getRunningReleaseTask();
+  
+    if (!isRunning) {
+      const delta = req.body;
+      const inserts = flatten(delta.map(changeSet => changeSet.inserts));
+      const statusTriples = inserts.filter((t) => {
+        return t.predicate.value == 'http://www.w3.org/ns/adms#status'
+          && t.object.value == RELEASE_TASK_STATUSES.READY_FOR_RELEASE;
+      });
+  
+      if (statusTriples.length) {
+        console.log(`Found ${statusTriples.length} release tasks.`);
+        const task = await getNextReleaseTask();
+        if (task) {
+          console.log(`Start releasing new DCAT data`);
+          task.execute(); // errors are handled inside task.execute()
+          return res.status(202).end();
+        } else {
+          console.log(`No scheduled release task found.`);
+          return res.status(200).end();
+        }
       } else {
-        console.log(`No scheduled release task found.`);
+        console.log(`No insertion of status <${RELEASE_TASK_STATUSES.READY_FOR_RELEASE}> found in the delta message.`);
         return res.status(200).end();
       }
     } else {
-      console.log(`No insertion of status <${RELEASE_TASK_STATUSES.READY_FOR_RELEASE}> found in the delta message.`);
-      return res.status(200).end();
+      console.log("Another release task is running. Not attempting to parse delta's for new tasks.");
+      return res.end("Another release task is running. Not attempting to parse delta's for new tasks.");
     }
-  } else {
-    console.log("Another release task is running. Not attempting to parse delta's for new tasks.");
-    return res.end("Another release task is running. Not attempting to parse delta's for new tasks.");
+  } catch (error) {
+    console.log('The processing of the delta message has failed.');
+    console.trace(error);
+    return res.status(500).end();
   }
 });
 
